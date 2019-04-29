@@ -1,73 +1,107 @@
 
-public class Cat
-{
-    private double originWeight;
-    private double weight;
-
+public class Cat {
     private final double MIN_WEIGHT = 1000.0;
     private final double MAX_WEIGHT = 9000.0;
     private final int EYES_AMOUNT = 2;
 
-    private CatColor color;
+    private static final String DEAD = "Dead";
+    private static final String EXPLODED = "Exploded";
+    private static final String SLEEPING = "Sleeping";
+    private static final String PLAYING = "Playing";
 
+    private double originWeight;
+    private double weight;
     private double eaten = 0.;
+    private CatColor color;
+    private boolean isAlive;
 
+    private static int catsCount = 0;
 
-    private static int count = 0;
-
-    public Cat()
-    {
-        weight = 1500.0 + 3000.0 * Math.random();
-        originWeight = weight;
-        count++;
-        color = CatColor.BLACK;
+    public Cat() {                                  //Если парвильно понял с конструкторами
+        this(1500.0 + 3000.0 * Math.random());
     }
 
     public Cat(Double weight) {
-        this();
         this.weight = weight;
+        originWeight = weight;
+        catsCount++;
+        color = CatColor.BLACK;
+        isAlive = true;
     }
 
-    public static Cat copyCat (Cat inputCat){
+    public static Cat copyCat(Cat inputCat) {
         Cat copy = new Cat(inputCat.weight);
         copy.originWeight = inputCat.originWeight;
-        return copy;
-    }
 
-
-    public void defecate(){
-        if (this.eaten < 20){
-            System.out.println("Can't defecate! Feed me more!");
+        if (inputCat.isAlive) {
+            return copy;
+        } else {
+            catsCount--;
+            return copy;
         }
-        if (this.eaten <= 100 && this.eaten >= 20){
-           weight -= eaten;
-           System.out.println("Normal stools");
-       }
-       if (this.eaten > 100 && this.eaten < 500){
-           weight -= (eaten - 50);
-           System.out.println("Double stools");
-       }
-       if (this.eaten >= 500){
-           weight -= 300;
-           System.out.println("Triple stools! Don't feed me so much!");
-       }
     }
 
-    public void meow()
-    {
-        weight = weight - 1;
-        System.out.println("Meow");
+    public void defecate() {
+        if (isAlive) {
+            if (eaten < 20) {
+                System.out.println("Can't defecate! Feed me more!");
+            }
+            if (eaten <= 100 && eaten >= 20) {
+                weight -= eaten;
+                System.out.println("Normal stools");
+            }
+            if (eaten > 100 && eaten < 500) {
+                weight -= (eaten - 50);
+                System.out.println("Double stools");
+            }
+            if (eaten >= 500) {
+                weight -= 300;
+                System.out.println("Triple stools! Don't feed me so much!");
+            }
+            tryToDecrementCatsCount();
+        } else {
+            System.out.println("Dead cat can't defecate!");
+        }
     }
 
-    public void feed(Double amount)
-    {
-        weight = weight + amount;
-        eaten += amount;
+    public void meow() {
+        if (isAlive) {
+            weight--;
+            System.out.println("Meow");
+            tryToDecrementCatsCount();
+        } else {
+            System.out.println("Dead cat can't meow!");
+        }
     }
 
-    public void drink(Double amount)
-    {
-        weight = weight + amount;
+    public void feed(double amount) {
+        if (isAlive) {
+            weight += amount;
+            eaten += amount;
+            tryToDecrementCatsCount();
+        } else {
+            System.out.println("Dead cat can't eat!");
+        }
+    }
+
+    public void drink(double amount) {
+        if (isAlive) {
+            weight += amount;
+            tryToDecrementCatsCount();
+        } else {
+            System.out.println("Dead cat can't drink!");
+        }
+    }
+
+    private void tryToDecrementCatsCount() {
+        if (isAlive && ((getStatus().equals(DEAD) || getStatus().equals(EXPLODED)))) {
+            catsCount--;
+            this.isAlive = false;
+        }
+    }
+
+    public boolean isAlive() {
+        return isAlive;
     }
 
     public CatColor getColor() {
@@ -78,38 +112,33 @@ public class Cat
         this.color = color;
     }
 
-    public static int getCount() {
-        return count;
+    public static int getCatsCount() {
+        return catsCount;
     }
 
-    public double getEaten(){
+    public double getEaten() {
         return eaten;
     }
 
-    public double getWeight()
-    {
+    public double getWeight() {
         return weight;
     }
 
-    public double getMIN_WEIGHT() {
+    public double getMinWeight() {
         return MIN_WEIGHT;
     }
 
-    public String getStatus()
-    {
-        if(weight < MIN_WEIGHT) {
-            count--;
-            return "Dead";
-        }
-        else if(weight > MAX_WEIGHT) {
-            count--;
-            return "Exploded";
-        }
-        else if(weight > originWeight) {
-            return "Sleeping";
-        }
-        else {
-            return "Playing";
+    public String getStatus() {
+        if (weight < MIN_WEIGHT) {
+            return DEAD;
+        } else if (weight > MAX_WEIGHT) {
+            return EXPLODED;
+        } else if (weight > originWeight) {
+            return SLEEPING;
+        } else {
+            return PLAYING;
         }
     }
+
+
 }
