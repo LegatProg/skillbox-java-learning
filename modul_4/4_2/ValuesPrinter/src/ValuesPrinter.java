@@ -4,10 +4,10 @@ public class ValuesPrinter {
     public static void main(String[] args) {
 
 
-        System.out.println("\nDouble min: " + Double.MIN_VALUE);
+        System.out.println("\nDouble min: " + (-Double.MAX_VALUE));
         System.out.println("Double max: " + Double.MAX_VALUE);
 
-        System.out.println("\nFloat min: " + Float.MIN_VALUE);
+        System.out.println("\nFloat min: " + (-Float.MAX_VALUE));
         System.out.println("Float max: " + Float.MAX_VALUE);
 
         System.out.println("\nLong min: " + Long.MIN_VALUE);
