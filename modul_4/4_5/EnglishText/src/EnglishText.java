@@ -7,7 +7,7 @@ public class EnglishText {
                 "and they will do her good. Set out before it gets hot, and when you are going, walk nicely and quietly and do not run off the path, or you may fall and break the bottle, " +
                 "and then your grandmother will get nothing. And when you go into her room, don't forget to say, good-morning, and don't peep into every corner before you do it.\"";
 
-        text = text.replaceAll("\\p{Punct}+", "");
+        text = text.replaceAll("[\\p{Punct}&&[^']]+", "");
         String[] words = text.split("\\s+");
         for (String word : words){
             System.out.println(word);

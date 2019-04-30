@@ -8,13 +8,11 @@ public class Loader {
         if (phoneNumber.length() == 10) {
             phoneNumber = '7' + phoneNumber;
             printNumberInRightFormat(phoneNumber);
+        } else if (phoneNumber.length() == 11) {
+            phoneNumber = phoneNumber.replaceFirst("^.", "7");
+            printNumberInRightFormat(phoneNumber);
         } else {
-            if (phoneNumber.length() == 11) {
-                phoneNumber = phoneNumber.replaceFirst("^.", "7");
-                printNumberInRightFormat(phoneNumber);
-            } else {
-                System.out.println("Wrong number format");
-            }
+            System.out.println("Wrong number format");
         }
         scanner.close();
     }
