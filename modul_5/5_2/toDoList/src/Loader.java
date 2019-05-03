@@ -32,6 +32,7 @@ public class Loader {
                 System.out.println("Wrong command, try again!");
             }
         } while (true);
+        scanner.close();
     }
 
     private static void printCommands() {
