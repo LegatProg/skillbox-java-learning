@@ -9,13 +9,12 @@ public class Loader {
 
     public static void main(String[] args) {
 
-        String command;
         emails = new TreeSet<>();
         boolean isExit = false;
         try (Scanner scanner = new Scanner(System.in)) {
             do {
                 System.out.println("\nType command (to view available commands type \"HELP\"):");
-                command = scanner.nextLine().trim();
+                String command = scanner.nextLine().trim();
                 switch (command) {
                     case "EXIT": {
                         isExit = true;
