@@ -1,17 +1,9 @@
 package bank.clients;
 
 public class Person extends Client {
-    @Override
-    public void withdrawMoney(double amount) {
-        if (isEnoughMoney(amount)) {
-            account -= amount;
-        } else {
-            System.out.println("Not enough money!");
-        }
-    }
 
     @Override
-    public void depositMoney(double amount) {
+    public void depositMoney(long amount) {
         account += amount;
     }
 }

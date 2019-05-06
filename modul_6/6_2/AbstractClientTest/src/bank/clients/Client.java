@@ -2,17 +2,23 @@ package bank.clients;
 
 public abstract class Client {
 
-    double account;
+    protected long account;
 
-    public abstract void withdrawMoney(double amount);
+    public void withdrawMoney(long amount) {
+        if (isEnoughMoney(amount)) {
+            account -= amount;
+        } else {
+            System.out.println("Not enough money!");
+        }
+    }
 
-    public abstract void depositMoney(double amount);
+    public abstract void depositMoney(long amount);
 
-    public double getAccount() {
+    public long getAccount() {
         return account;
     }
 
-    boolean isEnoughMoney(double amount) {
+    boolean isEnoughMoney(long amount) {
         return account - amount >= 0;
     }
 }

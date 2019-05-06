@@ -5,17 +5,13 @@ public class LegalEntity extends Client {
     private final float COMMISSION = 0.01f;
 
     @Override
-    public void withdrawMoney(double amount) {
+    public void withdrawMoney(long amount) {
         amount += amount * COMMISSION;
-        if (isEnoughMoney(amount)){
-            account -= amount;
-        } else {
-            System.out.println("Not enough money!");
-        }
+        super.withdrawMoney(amount);
     }
 
     @Override
-    public void depositMoney(double amount) {
+    public void depositMoney(long amount) {
         account += amount;
     }
 }
