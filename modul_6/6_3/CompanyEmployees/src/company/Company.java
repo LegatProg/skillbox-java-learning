@@ -1,8 +1,7 @@
 package company;
 
 import employees.AbsEmployee;
-import utils.SalaryAscendingComparator;
-import utils.SalaryDescendingComparator;
+import employees.Employee;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,22 +18,30 @@ public class Company {
     }
 
     public void getTopSalaryStaff(int count) {
-        printEmployeesWithSort(new SalaryDescendingComparator(), count);
+        printEmployeesWithSort(Comparator.comparing(Employee::getMonthSalary).reversed(), count);
     }
 
     public void getLowestSalaryStaff(int count) {
-        printEmployeesWithSort(new SalaryAscendingComparator(), count);
+        printEmployeesWithSort(Comparator.comparing(Employee::getMonthSalary), count);
     }
 
-    private void printEmployeesWithSort(Comparator<AbsEmployee> comparator, int limit) {
+    private void printEmployeesWithSort(Comparator<Employee> comparator, int limit) {
         ArrayList<AbsEmployee> list = new ArrayList<>(employees);
-        list.sort(comparator);
-        if (limit <= employees.size()) {
-            list.stream().limit(limit).forEach(System.out::println);
-        } else {
+        if (employees.size() < limit) {
             System.out.println("Not enough people to print, printing all company employees");
-            list.forEach(System.out::println);
         }
+        list.stream()
+                .sorted(comparator)
+                .limit(limit)
+                .forEach(System.out::println);
+
+//        list.sort(comparator);
+//        if (limit <= employees.size()) {
+//            list.stream().limit(limit).forEach(System.out::println);
+//        } else {
+//            System.out.println("Not enough people to print, printing all company employees");
+//            list.forEach(System.out::println);
+//        }
     }
 
     public void hireEmployee(AbsEmployee employee) {
