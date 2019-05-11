@@ -3,6 +3,8 @@ import employees.EmployeeImpl;
 import employees.Hierarchy;
 import utils.Name;
 
+import java.util.TreeMap;
+
 public class Loader {
 
     public static void main(String[] args) {
@@ -35,7 +37,8 @@ public class Loader {
         System.out.println("===========================");
         google.getTopSalaryStaff(10);
         System.out.println("==========================================================================");
+
+        TreeMap<String, String> map = new TreeMap<>();
+
     }
-
-
 }
