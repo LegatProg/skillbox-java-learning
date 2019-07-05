@@ -21,39 +21,6 @@ public class Company {
         this.monthIncome = monthIncome;
     }
 
-
-    public void getTopSalaryStaff(int count) {
-        printEmployeesWithSort(Comparator.comparing(Employee::getMonthSalary).reversed(), count);
-    }
-
-    public void getLowestSalaryStaff(int count) {
-        printEmployeesWithSort(Comparator.comparing(Employee::getMonthSalary), count);
-    }
-
-    private void printEmployeesWithSort(Comparator<Employee> comparator, int limit) {
-        ArrayList<EmployeeImpl> list = new ArrayList<>(employees);
-        if (employees.size() < limit) {
-            System.out.println("Not enough people to print, printing all company employees");
-        }
-        list.stream()
-                .sorted(comparator)
-                .limit(limit)
-                .forEach(System.out::println);
-    }
-
-    public void printEmployeesInNaturalSort() {
-        employees.forEach(System.out::println);
-    }
-
-    public void hireEmployee(EmployeeImpl employee) {
-        countEmployeeSalary(employee);
-        employees.add(employee);
-    }
-
-    public void dismissEmployee(EmployeeImpl employee) {
-        employees.remove(employee);
-    }
-
     private void putToEarnedMoneyMap(@NotNull EmployeeImpl salesManager, long earnedMoney) {
         if (salesManager.getPosition().equals(Hierarchy.SALES_MANAGER)) {
             salesManagersEarnedMoney.put(salesManager, earnedMoney);
@@ -113,5 +80,41 @@ public class Company {
 
     public void setMonthIncome(long monthIncome) {
         this.monthIncome = monthIncome;
+    }
+
+    public TreeSet<EmployeeImpl> getEmployees() {
+        return employees;
+    }
+
+    public void getTopSalaryStaff(int count) {
+        printEmployeesWithSort(Comparator.comparing(Employee::getMonthSalary).reversed(), count);
+    }
+
+    public void getLowestSalaryStaff(int count) {
+        printEmployeesWithSort(Comparator.comparing(Employee::getMonthSalary), count);
+    }
+
+    private void printEmployeesWithSort(Comparator<Employee> comparator, int limit) {
+        ArrayList<EmployeeImpl> list = new ArrayList<>(employees);
+        if (employees.size() < limit) {
+            System.out.println("Not enough people to print, printing all company employees");
+        }
+        list.stream()
+                .sorted(comparator)
+                .limit(limit)
+                .forEach(System.out::println);
+    }
+
+    public void printEmployeesInNaturalSort() {
+        employees.forEach(System.out::println);
+    }
+
+    public void hireEmployee(EmployeeImpl employee) {
+        countEmployeeSalary(employee);
+        employees.add(employee);
+    }
+
+    public void dismissEmployee(EmployeeImpl employee) {
+        employees.remove(employee);
     }
 }

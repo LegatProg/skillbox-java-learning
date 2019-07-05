@@ -3,6 +3,8 @@ import employees.EmployeeImpl;
 import employees.Hierarchy;
 import utils.Name;
 
+import java.util.ArrayList;
+
 public class Loader {
 
     public static void main(String[] args) {
@@ -27,7 +29,7 @@ public class Loader {
         System.out.println("==========================================================================");
         System.out.println("After first month: ");
 
-        google.setMonthIncome(GOOGLE_BASE_MONTH_INCOME + (long) (Math.random() * GOOGLE_BASE_MONTH_INCOME * 0.1));
+        google.setMonthIncome(GOOGLE_BASE_MONTH_INCOME + (long) ((Math.random() - 0.5) * GOOGLE_BASE_MONTH_INCOME * 0.2));
         google.countSalesManagersEarnedMoney();
         google.countStuffMonthSalaries();
 
@@ -36,5 +38,28 @@ public class Loader {
         google.getTopSalaryStaff(10);
         System.out.println("==========================================================================");
 
+        System.out.println("After second month: ");
+        google.setMonthIncome(GOOGLE_BASE_MONTH_INCOME + (long) ((Math.random() - 0.5) * GOOGLE_BASE_MONTH_INCOME * 0.2));
+        google.countSalesManagersEarnedMoney();
+        google.countStuffMonthSalaries();
+
+
+        dismiss5PercentsOfStuff(google);
+        System.out.println("==========================================================================");
+        google.getLowestSalaryStaff(10);
+        System.out.println("===========================");
+        google.getTopSalaryStaff(10);
+
+    }
+
+    private static void dismiss5PercentsOfStuff(Company company) {
+        System.out.println("DISMISS WAVE:");
+        ArrayList<EmployeeImpl> list = new ArrayList<>(company.getEmployees());
+        for (int i = 0; i < list.size() * 0.05; i++) {
+            int x = (int) (Math.random() * list.size());
+            System.out.println(list.get(x).getName() + " was dismissed");
+            company.dismissEmployee(list.get(x));
+            list.remove(x);
+        }
     }
 }

@@ -21,8 +21,6 @@ public class Loader {
             google.hireEmployee(new Cashier(Name.getRandomName()));
         }
 
-//        google.printEmployeesInNaturalSort();
-
         google.getLowestSalaryStaff(10);
         System.out.println("======================");
         google.getTopSalaryStaff(10);
