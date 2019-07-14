@@ -37,9 +37,9 @@ public class Company {
                 final double BENEFIT_PERCENT = 0.02;
 
                 if (getMonthIncome() > COM_INCOME_TO_GET_BENEFIT) {
-                    employee.setMonthSalary(FIXED_PART + (int) Math.ceil(getMonthIncome() * BENEFIT_PERCENT));
+                    employee.setFixedSalary(FIXED_PART + (int) Math.ceil(getMonthIncome() * BENEFIT_PERCENT));
                 } else {
-                    employee.setMonthSalary(FIXED_PART);
+                    employee.setFixedSalary(FIXED_PART);
                 }
                 break;
             }
@@ -50,12 +50,12 @@ public class Company {
                 if (salesManagersEarnedMoney.containsKey(employee)) {
                     salary += Math.ceil(salesManagersEarnedMoney.get(employee) * PERCENT);
                 }
-                employee.setMonthSalary(salary);
+                employee.setFixedSalary(salary);
                 break;
             }
             case CASHIER: {
                 final int FIXED_PART = 30_000_00;   //коп
-                employee.setMonthSalary(FIXED_PART);
+                employee.setFixedSalary(FIXED_PART);
                 break;
             }
         }
@@ -87,11 +87,11 @@ public class Company {
     }
 
     public void getTopSalaryStaff(int count) {
-        printEmployeesWithSort(Comparator.comparing(Employee::getMonthSalary).reversed(), count);
+        printEmployeesWithSort(Comparator.comparing(Employee::getFixedSalary).reversed(), count);
     }
 
     public void getLowestSalaryStaff(int count) {
-        printEmployeesWithSort(Comparator.comparing(Employee::getMonthSalary), count);
+        printEmployeesWithSort(Comparator.comparing(Employee::getFixedSalary), count);
     }
 
     private void printEmployeesWithSort(Comparator<Employee> comparator, int limit) {

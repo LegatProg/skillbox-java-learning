@@ -10,7 +10,6 @@ public class SalesManager extends AbsEmployee {
     public SalesManager(String name, long earnedMoney) {
         super(name);
         this.earnedMoney = earnedMoney;
-        setHierarchyId(1);
     }
 
     @Override

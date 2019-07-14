@@ -1,7 +1,9 @@
 package employees;
 
+import company.Company;
+
 public interface Employee {
 
-    long getFixedSalary();
+    long getSalary();
 
 }

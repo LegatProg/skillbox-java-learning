@@ -6,7 +6,6 @@ public class Cashier extends AbsEmployee {
 
     public Cashier(String name) {
         super(name);
-        setHierarchyId(2);
     }
 
     @Override

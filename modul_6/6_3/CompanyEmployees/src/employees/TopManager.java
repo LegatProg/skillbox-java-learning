@@ -8,7 +8,6 @@ public class TopManager extends AbsEmployee {
 
     public TopManager(String name) {
         super(name);
-        setHierarchyId(0);
     }
 
     public void setMonthSalary() {

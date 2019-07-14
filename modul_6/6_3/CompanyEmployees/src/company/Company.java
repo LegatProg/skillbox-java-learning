@@ -34,14 +34,6 @@ public class Company {
                 .sorted(comparator)
                 .limit(limit)
                 .forEach(System.out::println);
-
-//        list.sort(comparator);
-//        if (limit <= employees.size()) {
-//            list.stream().limit(limit).forEach(System.out::println);
-//        } else {
-//            System.out.println("Not enough people to print, printing all company employees");
-//            list.forEach(System.out::println);
-//        }
     }
 
     public void hireEmployee(AbsEmployee employee) {
@@ -52,10 +44,6 @@ public class Company {
 
     public void dismissEmployee(AbsEmployee employee) {
         employees.remove(employee);
-    }
-
-    public void printEmployeesInNaturalSort() {
-        employees.forEach(System.out::println);
     }
 
     public long getMonthIncome() {
