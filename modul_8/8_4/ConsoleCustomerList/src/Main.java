@@ -33,7 +33,7 @@ public class Main
                     throw new IllegalArgumentException(commandError);
                 }
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println(commandError);
             }
