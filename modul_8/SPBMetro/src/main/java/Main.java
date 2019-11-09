@@ -25,8 +25,8 @@ public class Main {
     public static void main(String[] args) {
 
         loggerInfo = LogManager.getRootLogger();
-        loggerErr = LogManager.getLogger("errLogger");
-        loggerWrongStations = LogManager.getLogger("wrongStationsLogger");
+        loggerErr = LogManager.getLogger(Main.class);
+        loggerWrongStations = LogManager.getLogger(Main.class);
 
         try {
             RouteCalculator calculator = getRouteCalculator();
