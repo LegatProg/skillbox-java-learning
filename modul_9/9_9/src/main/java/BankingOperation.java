@@ -86,9 +86,11 @@ public class BankingOperation {
     }
 
     public String getDescription() {
-        String desc = operationDescription.replaceAll("^\\S+\\s+", ""); //cut the 1st part of the string
+        String desc = operationDescription.replaceAll
+                ("^\\S+\\s+\\d*\\\\?/?\\d*\\s*/*\\\\*.+[\\\\/]", ""); //cut the 1st part of the string
         desc = desc.replaceAll("\\s\\d{2}\\..+", ""); //cut the end of the string;
-        return desc.trim();
+        desc = desc.replaceAll(">MOSCOW",""); //cut >MOSCOW
+        return desc.trim(); //
     }
 
     @Override
