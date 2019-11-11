@@ -4,6 +4,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
 import java.io.Reader;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -32,36 +33,19 @@ public class Loader {
         expensesByCategory.forEach((k, v) -> {
             System.out.printf("%s : %.2f RUB \n", k, v / 100.0);
         });
-
+//        Method method = BankingOperation.class.getMethod("getIncome");
     }
 
     private static HashMap<String, Long> separateIncomeByCategory(Set<String> incomeDescriptions,
                                                                   List<BankingOperation> operations) {
         HashMap<String, Long> incomeByCategory = new HashMap<>();
-//        for (String desc : expDescriptions) {
-//            for (BankingOperation operation : operations) {
-//                if (operation.getDescription().equals(desc)) {
-//                    if (!incomeByCategory.containsKey(desc)) {
-//                        incomeByCategory.put(desc, operation.getExpense());
-//                    } else {
-//                        long newValue = incomeByCategory.get(desc) + operation.getExpense();
-//                        incomeByCategory.put(desc, newValue);
-//                    }
-//                }
-//            }
-//        }
-        incomeDescriptions.forEach(descr ->
-        {
-            operations.forEach(operation -> {
-                if (operation.getDescription().equals(descr)) {
-                    if (!incomeByCategory.containsKey(descr)) {
-                        incomeByCategory.put(descr, operation.getIncome());
-                    } else {
-                        incomeByCategory.put(descr, incomeByCategory.get(descr) + operation.getIncome());
-                    }
-                }
 
-            });
+        incomeDescriptions.forEach(descr -> {
+            long val = operations.stream()
+                    .filter(operation -> operation.getDescription().equals(descr))
+                    .mapToLong(BankingOperation::getIncome)
+                    .sum();
+            incomeByCategory.put(descr, val);
         });
 
         return incomeByCategory;
@@ -70,30 +54,13 @@ public class Loader {
     private static HashMap<String, Long> separateExpensesByCategory(Set<String> expDescriptions,
                                                                     List<BankingOperation> operations) {
         HashMap<String, Long> expensesByCategory = new HashMap<>();
-//        for (String desc : expDescriptions) {
-//            for (BankingOperation operation : operations) {
-//                if (operation.getDescription().equals(desc)) {
-//                    if (!expensesByCategory.containsKey(desc)) {
-//                        expensesByCategory.put(desc, operation.getExpense());
-//                    } else {
-//                        long newValue = expensesByCategory.get(desc) + operation.getExpense();
-//                        expensesByCategory.put(desc, newValue);
-//                    }
-//                }
-//            }
-//        }
-        expDescriptions.forEach(descr ->
-        {
-            operations.forEach(operation -> {
-                if (operation.getDescription().equals(descr)) {
-                    if (!expensesByCategory.containsKey(descr)) {
-                        expensesByCategory.put(descr, operation.getExpense());
-                    } else {
-                        expensesByCategory.put(descr, expensesByCategory.get(descr) + operation.getExpense());
-                    }
-                }
 
-            });
+        expDescriptions.forEach(descr -> {
+            long val = operations.stream()
+                    .filter(operation -> operation.getDescription().equals(descr))
+                    .mapToLong(BankingOperation::getExpense)
+                    .sum();
+            expensesByCategory.put(descr, val);
         });
 
         return expensesByCategory;
