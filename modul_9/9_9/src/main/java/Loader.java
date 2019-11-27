@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Loader {
@@ -19,16 +20,16 @@ public class Loader {
 
         List<String[]> list = readAll();
         List<BankingOperation> operations = parseOperations(list);
-        System.out.printf("Total income: %.2f RUB\n", (double) (getTotalIncome(operations) / 100.0));
-        System.out.printf("Total expense: %.2f RUB\n", (double) (getTotalExpense(operations) / 100.0));
+        System.out.printf("Total income: %.2f RUB\n", (double) (getTotalIncome(operations) / 100.0)); //change function
+        System.out.printf("Total expense: %.2f RUB\n", (double) (getTotalExpense(operations) / 100.0)); //change function
 
-        Map<String, Long> incByCategory = groupIncomesByCategory(operations);
+        Map<String, Long> incByCategory = groupIncomesByCategory(operations); //change function
         System.out.println("\nIncome by Category: \n");
         incByCategory.forEach((k, v) -> {
             System.out.printf("%s : %.2f RUB \n", k, v / 100.0);
         });
 
-        Map<String, Long> expensesByCategory = groupExpensesByCategory(operations);
+        Map<String, Long> expensesByCategory = groupExpensesByCategory(operations); //change function
         System.out.println("\nExpenses by Category: \n");
         expensesByCategory.forEach((k, v) -> {
             System.out.printf("%s : %.2f RUB \n", k, v / 100.0);
@@ -45,11 +46,11 @@ public class Loader {
 
     }
 
-    private static Map<String, Long> groupIncomesByCategory(List<BankingOperation> operations) {
+    private static Map<String, Long> groupIncomesByCategory(List<BankingOperation> operations, Function<BankingOperation, Long> function) {
         return operations.stream()
                 .filter(operation -> operation.getIncome() > 0)
                 .collect(Collectors.groupingBy(BankingOperation::getDescription,
-                        Collectors.summingLong(BankingOperation::getIncome)));
+                        Collectors.summingLong(function)));
 
 
     }
