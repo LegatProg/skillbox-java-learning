@@ -3,12 +3,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Scanner;
 
 public class Loader {
@@ -24,37 +24,31 @@ public class Loader {
                 break;
             }
         }
-        URL url = new URL(path);
-        InputStream is = url.openStream();
-        Document doc = Jsoup.parse(is, "UTF-8", path);
 
+        Document doc = Jsoup.connect(path).maxBodySize(0).get();
         Elements elements = doc.select("img");
+        
         int count = 0;
         for (Element element : elements) {
             String href = element.attr("src");
-            if (href.startsWith("http") && (href.contains(".jpg") || (href.contains(".png")
-                    || (href.contains(".bmp") || href.contains(".ico"))))) {
+            String template = "^http.+jpg|png|bmp|ico|gif|psd|svg.*";
+            if (href.matches(template)) {
                 downloadImage(href);
                 System.out.println(++count + " image(s) downloaded");
             }
         }
     }
 
-    private static void downloadImage(String imgSrc) {
-        BufferedImage image;
-        try {
-            String url = imgSrc;
-            imgSrc = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
-            String imageFormat = imgSrc.substring(imgSrc.lastIndexOf(".") + 1);
-            String imgPath = "res/" + imgSrc;
-            URL imageUrl = new URL(url);
-            image = ImageIO.read(imageUrl);
-            if (image != null) {
-                File file = new File(imgPath);
-                ImageIO.write(image, imageFormat, file);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+    private static void downloadImage(String imgSrc) throws MalformedURLException {
+        URL url = new URL(imgSrc);
+        imgSrc = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
+        String fileName = "res/" + imgSrc;
+        try (ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
+             FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
+            fileOutputStream.getChannel()
+                    .transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
