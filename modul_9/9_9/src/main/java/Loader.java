@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.ToLongFunction;
 import java.util.stream.Collectors;
 
 public class Loader {
@@ -20,22 +20,18 @@ public class Loader {
 
         List<String[]> list = readAll();
         List<BankingOperation> operations = parseOperations(list);
-        System.out.printf("Total income: %.2f RUB\n", (double) (getTotalIncome(operations) / 100.0)); //change function
-        System.out.printf("Total expense: %.2f RUB\n", (double) (getTotalExpense(operations) / 100.0)); //change function
+        System.out.printf("Total income: %.2f RUB\n", (double) (getTotal(operations, BankingOperation::getIncome) / 100.0));
+        System.out.printf("Total expense: %.2f RUB\n", (double) (getTotal(operations, BankingOperation::getExpense) / 100.0));
 
-        Map<String, Long> incByCategory = groupIncomesByCategory(operations); //change function
+        Map<String, Long> incByCategory = groupByCategory(operations, BankingOperation::getIncome);
         System.out.println("\nIncome by Category: \n");
-        incByCategory.forEach((k, v) -> {
-            System.out.printf("%s : %.2f RUB \n", k, v / 100.0);
-        });
+        printGroup(incByCategory);
 
-        Map<String, Long> expensesByCategory = groupExpensesByCategory(operations); //change function
+        Map<String, Long> expensesByCategory = groupByCategory(operations, BankingOperation::getExpense);
         System.out.println("\nExpenses by Category: \n");
-        expensesByCategory.forEach((k, v) -> {
-            System.out.printf("%s : %.2f RUB \n", k, v / 100.0);
-        });
-        System.out.println("\n\nConsolidated report: \n");
+        printGroup(expensesByCategory);
 
+        System.out.println("\n\nConsolidated report: \n");
         operations.stream()
                 .collect(Collectors.groupingBy(BankingOperation::getDescription,
                         Collectors.mapping(Summary::fromOperation,
@@ -46,21 +42,24 @@ public class Loader {
 
     }
 
-    private static Map<String, Long> groupIncomesByCategory(List<BankingOperation> operations, Function<BankingOperation, Long> function) {
+    private static void printGroup(Map<String, Long> map) {
+        map.forEach((k, v) -> {
+            if (v > 0) {
+                System.out.printf("%s : %.2f RUB \n", k, v / 100.0);
+            }
+        });
+    }
+
+    private static Map<String, Long> groupByCategory(List<BankingOperation> operations, ToLongFunction<BankingOperation> function) {
         return operations.stream()
-                .filter(operation -> operation.getIncome() > 0)
                 .collect(Collectors.groupingBy(BankingOperation::getDescription,
                         Collectors.summingLong(function)));
 
 
     }
 
-    private static Map<String, Long> groupExpensesByCategory(List<BankingOperation> operations) {
-        return operations.stream()
-                .filter(operation -> operation.getExpense() > 0)
-                .collect(Collectors.groupingBy(BankingOperation::getDescription,
-                        Collectors.summingLong(BankingOperation::getExpense)));
-
+    private static long getTotal(List<BankingOperation> list, ToLongFunction<BankingOperation> function) {
+        return list.stream().mapToLong(function).sum();
     }
 
     private static List<BankingOperation> parseOperations(List<String[]> list) {
@@ -104,14 +103,6 @@ public class Loader {
                 .build();
     }
 
-    private static long getTotalIncome(List<BankingOperation> list) {
-        return list.stream().mapToLong(BankingOperation::getIncome).sum();
-    }
-
-    private static long getTotalExpense(List<BankingOperation> list) {
-        return list.stream().mapToLong(BankingOperation::getExpense).sum();
-    }
-
     private static class Summary {
         long income;
         long withdraw;
@@ -124,7 +115,7 @@ public class Loader {
         static Summary merge(Summary s1, Summary s2) {
             return new Summary(s1.income + s2.income, s1.withdraw + s2.withdraw);
         }
-        
+
         static Summary fromOperation(BankingOperation bankingOperation) {
             return new Summary(bankingOperation.getIncome(), bankingOperation.getExpense());
         }

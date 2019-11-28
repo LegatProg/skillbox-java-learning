@@ -27,7 +27,7 @@ public class Loader {
 
         Document doc = Jsoup.connect(path).maxBodySize(0).get();
         Elements elements = doc.select("img");
-        
+
         int count = 0;
         for (Element element : elements) {
             String href = element.attr("src");
