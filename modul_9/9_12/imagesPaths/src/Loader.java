@@ -31,7 +31,7 @@ public class Loader {
         int count = 0;
         for (Element element : elements) {
             String href = element.attr("src");
-            String template = "^http.+jpg|png|bmp|ico|gif|psd|svg.*";
+            String template = "^http.+(jpg|png|bmp|ico|gif|psd|svg).*";
             if (href.matches(template)) {
                 downloadImage(href);
                 System.out.println(++count + " image(s) downloaded");
