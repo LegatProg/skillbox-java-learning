@@ -6,6 +6,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -18,29 +19,30 @@ public class Loader {
                 .get();
         Element table = doc.getElementsByTag("table").get(3);
         Elements rows = table.getElementsByTag("tr");
-        Map<String, ArrayList<String>> metro = new HashMap<>();
-        ArrayList<String> thisLines;
+        Map<String, ArrayList<String>> metro = new LinkedHashMap<>();
+        ArrayList<String> thisStations;
+        System.out.println(rows.size());
         for (Element el : rows) {
-            if (el.equals(rows.get(0))) {
+            if (el.equals(rows.get(0))) { //skip 1st row in table
                 continue;
             }
             String line = el.child(0).select("a[href]").get(0).attr("title"); //Line name
+//            String lineNum = el.child(0).select("td").attr("data-sort-value"); //Line #
+            String station = el.child(1).select("a[href]").get(0).text();
             if (!metro.containsKey(line)) {
-                metro.put(line, new ArrayList<>());
+                ArrayList<String> stationsList = new ArrayList<>();
+                stationsList.add(station);
+                metro.put(line, stationsList);
             } else {
-                thisLines = metro.get(line);
-                Elements spans = el.getElementsByTag("span");
-                for (Element span : spans) {
-                    if (span.attr("style").contains("nowrap")) {
-                        thisLines.add(span.text());
-                    }
-                }
-                metro.put(line, thisLines);
+                thisStations = metro.get(line);
+                thisStations.add(station);
+                metro.put(line, thisStations);
             }
         }
+        System.out.println(metro.size());
         metro.forEach((k, v) -> {
             System.out.println(k);
-            v.forEach(val -> System.out.println("\t" + val));
+            v.forEach(val -> System.out.println("\t" + (v.indexOf(val)+1) + "\t" + val));
         });
     }
 }
